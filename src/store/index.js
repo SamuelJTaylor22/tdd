@@ -9,8 +9,14 @@ export default new Vuex.Store({
     drafters:[],
   },
   mutations: {
+    addTrainer(state, data){
+      state.trainers.push(data)
+    }
   },
   actions: {
+    newTrainer({commit}, data){
+      commit("addTrainer", data)
+    }
   },
   modules: {
   }
