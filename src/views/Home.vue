@@ -13,12 +13,14 @@
           </div>
         </form>
       </div>
-      <div class="col-12 d-flex card-columns">
-        <trainer v-for="trainer in trainers" :key="trainer.name" :trainerData="trainer"/>
+      <div class="col-12">
+      <div class="card-columns">
+        <trainer class="card" v-for="trainer in trainers" :key="trainer.name" :trainerData="trainer"/>
+      </div>
       </div>
       <div class="col-12 mt-3">
-        <button v-if="!drafting" type="button" class="btn btn-primary" @click="drafting = true">Start!</button>
-        <button v-else type="button" class="btn btn-primary" @click="nextDraft">Next</button>
+        <button v-if="!drafting && trainers.length > 9" type="button" class="btn btn-primary" @click="drafting = true">Start!</button>
+        <button v-if="drafting" type="button" class="btn btn-primary" @click="nextDraft">Next</button>
       </div>
     </div>
   </main>
@@ -54,12 +56,22 @@ export default {
       for (let index = 0; index < this.trainers.length; index++) {
         const element = this.trainers[index];
         let options = trainersCopy.filter(t => t.name != element.name)
+        if (options.length == 0){
+          console.log("You didn't have enough people")
+          return
+        }
         let chosen = ''
         let selected = false
-        while (!selected) {
+        while (!selected){
+          let inc = 0
           chosen = this.getRandom(options)
           if(!element.drafting.includes(chosen.name)){
             selected = true
+          }
+          if(inc == 100){
+            selected = true
+            console.error("oops you went infinite");
+            return 
           }
         }
         trainersCopy = trainersCopy.filter(t => t.name != chosen.name)

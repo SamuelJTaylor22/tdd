@@ -1,5 +1,5 @@
 <template>
-  <div class="card text-left mx-1">
+  <div>
     <div class="card-body">
       <h4 class="card-title">{{trainerData.name}}</h4>
       <ol>
