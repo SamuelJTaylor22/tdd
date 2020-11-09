@@ -19,8 +19,9 @@
       </div>
       </div>
       <div class="col-12 mt-3">
-        <button v-if="!drafting && trainers.length > 9" type="button" class="btn btn-primary" @click="drafting = true">Start!</button>
+        <button v-if="!drafting" type="button" class="btn btn-primary" @click="drafting = true">Start!</button>
         <button v-if="drafting" type="button" class="btn btn-primary" @click="nextDraft">Next</button>
+        <button v-if="drafting" type="button" class="btn btn-danger" @click="undo">Undo</button>
       </div>
     </div>
   </main>
@@ -50,20 +51,28 @@ export default {
       let trainer = this.newTrainer.name
       this.$store.dispatch('newTrainer', {name:trainer, drafting:[]})
       this.newTrainer.name = ""
+      
     },
     nextDraft(){
       let trainersCopy = this.trainers
+      let lastTrainer = this.trainers[this.trainers.length - 1]
       for (let index = 0; index < this.trainers.length; index++) {
         const element = this.trainers[index];
         let options = trainersCopy.filter(t => t.name != element.name)
-        if (options.length == 0){
-          console.log("You didn't have enough people")
-          return
-        }
         let chosen = this.getRandom(options)
         trainersCopy = trainersCopy.filter(t => t.name != chosen.name)
         element.drafting.push(chosen.name)
+        
       }
+      if(this.trainers[0].drafting.length != lastTrainer.drafting.length){
+        this.undo()
+        this.nextDraft()
+      }
+    },
+    undo(){
+      let lastTrainer = this.trainers[this.trainers.length - 1]
+
+      this.$store.dispatch('undoLast', lastTrainer.drafting.length)
     },
     getRandom(arr){
       let random = Math.floor((Math.random()*arr.length))

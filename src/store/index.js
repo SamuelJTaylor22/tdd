@@ -11,11 +11,18 @@ export default new Vuex.Store({
   mutations: {
     addTrainer(state, data){
       state.trainers.push(data)
+    },
+    undoLast(state, index){
+      state.trainers.forEach(t => t.drafting.splice(index, 1))
+      state.trainers = state.trainers
     }
   },
   actions: {
     newTrainer({commit}, data){
       commit("addTrainer", data)
+    },
+    undoLast({commit}, num){
+      commit('undoLast', num)
     }
   },
   modules: {
