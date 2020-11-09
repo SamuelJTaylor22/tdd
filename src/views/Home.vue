@@ -35,7 +35,7 @@ export default {
   data(){
     return{
       newTrainer:{
-        name: "Technovoid200"
+        name: ""
       },
       drafting: false
     }
