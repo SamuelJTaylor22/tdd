@@ -60,23 +60,9 @@ export default {
           console.log("You didn't have enough people")
           return
         }
-        let chosen = ''
-        let selected = false
-        while (!selected){
-          let inc = 0
-          chosen = this.getRandom(options)
-          if(!element.drafting.includes(chosen.name)){
-            selected = true
-          }
-          if(inc == 100){
-            selected = true
-            console.error("oops you went infinite");
-            return 
-          }
-        }
+        let chosen = this.getRandom(options)
         trainersCopy = trainersCopy.filter(t => t.name != chosen.name)
         element.drafting.push(chosen.name)
-        console.log(element);
       }
     },
     getRandom(arr){
