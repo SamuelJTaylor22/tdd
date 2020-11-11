@@ -21,7 +21,6 @@
       <div class="col-12 mt-3">
         <button v-if="!drafting" type="button" class="btn btn-primary" @click="drafting = true">Start!</button>
         <button v-if="drafting" type="button" class="btn btn-primary" @click="nextDraft">Next</button>
-        <button v-if="drafting" type="button" class="btn btn-danger" @click="undo">Undo</button>
       </div>
     </div>
   </main>
@@ -54,11 +53,21 @@ export default {
       
     },
     nextDraft(){
+
+      // Maybe try the previous method with the new check?
       let trainersCopy = this.trainers
       let lastTrainer = this.trainers[this.trainers.length - 1]
       for (let index = 0; index < this.trainers.length; index++) {
         const element = this.trainers[index];
         let options = trainersCopy.filter(t => t.name != element.name)
+        for (let index = 0; index < element.drafting.length; index++) {
+          const trainer = element.drafting[index];
+          options = options.filter(t => t.name != trainer)
+        }
+        if(options.length == 0){
+          this.undo()
+        this.nextDraft()
+        }
         let chosen = this.getRandom(options)
         trainersCopy = trainersCopy.filter(t => t.name != chosen.name)
         element.drafting.push(chosen.name)
